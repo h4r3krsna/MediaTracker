@@ -30,6 +30,10 @@ public class MediaStorageUtil {
         this.context = context;
     }
 
+    /**
+     * Serializes MediaItems list to a JSON cache
+     * @param mediaItems
+     */
     public void saveMediaData(List<MediaItem> mediaItems){
         try {
             FileOutputStream outputStream = context.openFileOutput(cacheName, Context.MODE_PRIVATE);
@@ -51,6 +55,10 @@ public class MediaStorageUtil {
         }
     }
 
+    /**
+     * Converts JSON cache containing MediaItems to native objects
+     * @return List of native MediaItem objects from cache
+     */
     public List<MediaItem> getMediaDataList(){
         List<MediaItem> mediaList = new LinkedList<>();
 

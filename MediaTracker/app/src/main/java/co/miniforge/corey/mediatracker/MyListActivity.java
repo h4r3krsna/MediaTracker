@@ -50,6 +50,10 @@ public class MyListActivity extends AppCompatActivity {
         handleIntent();
     }
 
+    /**
+     * If this activity is started by another activity (the MediaItemDetailActivity), then this
+     * method saves the metadata entered by the user to the JSON in-memory and persistent caches.
+     */
     void handleIntent(){
         if(getIntent() != null){
             Intent intent = getIntent();
@@ -109,6 +113,10 @@ public class MyListActivity extends AppCompatActivity {
         handler.post(runnable);
     }
 
+    /**
+     * Updates the visual contents of the RecyclerView
+     * @param mediaItems a list of native MediaItems to be shown in the RecyclerView
+     */
     public void updateMediaItems(List<MediaItem> mediaItems){
         this.mediaItems = mediaItems;
         ((MediaRecyclerAdapter)media_list_recycler.getAdapter()).updateList(this.mediaItems);
