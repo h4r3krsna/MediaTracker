@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.util.Log;
 
 import co.miniforge.corey.mediatracker.MediaItemDetailActivity;
 import co.miniforge.corey.mediatracker.MyListActivity;
@@ -23,6 +24,8 @@ public class MediaViewHolder extends RecyclerView.ViewHolder {
     View inflated;
 
     Context context;
+
+    public static final String TAG = "MEDIA_VIEW_HOLDER";
 
     public MediaViewHolder(View itemView) {
         super(itemView);
@@ -47,6 +50,12 @@ public class MediaViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 //TODO: Create a new activity with this object's data
                 //Hint: mediaItem.toJson().toString() && context.startActivity);
+
+                Intent mediaItemDetailIntent = new Intent(context, MediaItemDetailActivity.class);
+                mediaItemDetailIntent.putExtra(MyListActivity.mediaExtra, mediaItem.toJson().toString());
+                Log.d(TAG, mediaItem.toJson().toString());
+
+                context.startActivity(mediaItemDetailIntent);
             }
         });
     }
