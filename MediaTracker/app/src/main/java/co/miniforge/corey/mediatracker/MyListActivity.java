@@ -61,6 +61,7 @@ public class MyListActivity extends AppCompatActivity {
             if(intent.hasExtra(mediaExtra)){
                 try {
                     JSONObject json = new JSONObject(intent.getStringExtra(mediaExtra));
+                    Log.d("MYLISTACTIVITY", json.toString());
                     MediaItem item = new MediaItem(json);
 
                     for(int i = 0; i < mediaItems.size(); i++){
