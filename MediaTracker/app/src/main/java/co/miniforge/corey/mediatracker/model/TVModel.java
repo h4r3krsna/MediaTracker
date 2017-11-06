@@ -9,5 +9,6 @@ import org.json.JSONObject;
 public class TVModel extends MediaItem {
     public TVModel(JSONObject jsonObject) {
         super(jsonObject);
+        this.type = MediaItemType.TV;
     }
 }
