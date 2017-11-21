@@ -21,7 +21,7 @@ public class MediaItem {
 
     public MediaItemType type = MediaItemType.Generic;
 
-    public enum MediaItemType {Generic, TV, Movie};
+    public enum MediaItemType {Generic, TV, Movie, YouTube};
 
     public MediaItem(JSONObject jsonObject){
         try{
@@ -43,23 +43,27 @@ public class MediaItem {
         this.type = MediaItemType.Generic;
     }
 
-    MediaItemType getTypeForString(String value){
+    public MediaItemType getTypeForString(String value){
         switch (value){
             case "TV":
                 return  MediaItemType.TV;
             case "Movie":
                 return  MediaItemType.Movie;
+            case "YouTube":
+                return MediaItemType.YouTube;
             default:
                 return MediaItemType.Generic;
         }
     }
 
-    String getStringForType (MediaItemType type){
+    public String getStringForType (MediaItemType type){
         switch (type) {
             case Movie:
                 return "Movie";
             case TV:
                 return "TV";
+            case YouTube:
+                return "YouTube";
             default:
                 return "Generic";
         }
