@@ -16,6 +16,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import co.miniforge.corey.mediatracker.model.MediaItem;
+import co.miniforge.corey.mediatracker.model.MovieModel;
+import co.miniforge.corey.mediatracker.model.TVModel;
+import co.miniforge.corey.mediatracker.model.YoutubeModel;
 
 /**
  * Created by corey on 10/15/17.
@@ -76,12 +79,28 @@ public class MediaStorageUtil {
                 }
                 // close and set result
                 inputStream.close();
-                JSONObject result = new JSONObject(stringBuilder.toString());
+                JSONObject serializedMediaItems = new JSONObject(stringBuilder.toString());
 
-                JSONArray jsonArray = result.getJSONArray("array");
+                JSONArray jsonArray = serializedMediaItems.getJSONArray("array");
 
                 for(int i = 0; i < jsonArray.length(); i++){
-                    mediaList.add(new MediaItem(jsonArray.getJSONObject(i)));
+                    MediaItem deserialized = null;
+                    JSONObject current = jsonArray.getJSONObject(i);
+                    switch (current.getString("type")) {
+                        case "TV":
+                            deserialized = new TVModel(current);
+                            break;
+                        case "Movie":
+                            deserialized = new MovieModel(current);
+                            break;
+                        case "YouTube":
+                            deserialized = new YoutubeModel(current);
+                            break;
+                        case "Generic":
+                        default:
+                            deserialized = new MediaItem(current);
+                    }
+                    mediaList.add(deserialized);
                 }
             }
         } catch (Exception e) {
