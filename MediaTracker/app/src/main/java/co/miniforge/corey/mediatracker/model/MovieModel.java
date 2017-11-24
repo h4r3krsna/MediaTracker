@@ -14,8 +14,8 @@ public class MovieModel extends MediaItem {
     public String genre;
     public MovieModel(JSONObject jsonObject) {
         super(jsonObject);
+        this.type = MediaItemType.Movie;
         try {
-            this.type = MediaItemType.Movie;
             this.myRating = jsonObject.getInt("myRating");
             this.genre = jsonObject.getString("genre");
         } catch (JSONException e) {
