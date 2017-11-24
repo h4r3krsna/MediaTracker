@@ -1,5 +1,8 @@
 package co.miniforge.corey.mediatracker;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import co.miniforge.corey.mediatracker.model.MediaItem;
-import co.miniforge.corey.mediatracker.MyListActivity;
 
 /**
  * This activity will display the contents of a media item and allow the user to update the contents
@@ -22,10 +24,6 @@ import co.miniforge.corey.mediatracker.MyListActivity;
  * the code in MyListActivity)
  */
 public class MediaItemDetailActivity extends AppCompatActivity {
-    public static final String MEDIAITEMDETAILACTIVITY = "MEDIAITEMDETAILACTIVITY";
-    TextView lblTitle, lblDescription, lblURL;
-    EditText txtTitle, txtDescription, txtURL;
-    Button btnSubmit;
     private JSONObject JSONMediaDetail;
     private MediaItem mediaItem;
 
@@ -34,61 +32,45 @@ public class MediaItemDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_item_detail);
 
-        locateViews();
+        mediaItem = parseMediaItemFromIntent();
 
-        receiveMediaDetail();
-
-        bindFunctionality();
+        createFragmentForMediaItemType(mediaItem);
     }
 
-    private void locateViews() {
-        lblTitle = (TextView) findViewById(R.id.lblTitle);
-        lblDescription = (TextView) findViewById(R.id.lblDescription);
-        lblURL = (TextView) findViewById(R.id.lblURL);
+    public void createFragmentForMediaItemType(MediaItem item) {
+        Fragment fragment = null;
 
-        txtTitle = (EditText) findViewById(R.id.txtTitle);
-        txtDescription = (EditText) findViewById(R.id.txtDescription);
-        txtURL = (EditText) findViewById(R.id.txtURL);
+        switch(item.type){
+            case Movie:
+                break;
+            case TV:
+                break;
+            case YouTube:
+                break;
+            case Generic:
+            default:
+                fragment = MediaItemDetailFragment.create(item);
+                break;
 
-        btnSubmit = (Button) findViewById(R.id.btnSubmit);
+        }
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 
-    private void receiveMediaDetail() {
+    private MediaItem parseMediaItemFromIntent() {
         String receivedMediaDetail = getIntent().getExtras().getString(MyListActivity.mediaExtra);
-        Log.d(MEDIAITEMDETAILACTIVITY, receivedMediaDetail);
-        mediaItem = null;
+        MediaItem result = null;
 
         try {
             JSONMediaDetail = new JSONObject(receivedMediaDetail);
-
-            lblTitle.setText("Title: " + JSONMediaDetail.get("title"));
-            lblDescription.setText("Description: " + JSONMediaDetail.get("description"));
-            lblURL.setText("URL: " + JSONMediaDetail.get("url"));
-
-            mediaItem = new MediaItem(JSONMediaDetail);
+            result = new MediaItem(JSONMediaDetail);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        return result;
     }
 
-    private void bindFunctionality() {
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (txtTitle.getText().toString() != "")
-                    mediaItem.title = txtTitle.getText().toString();
-                if (txtDescription.getText().toString() != "")
-                    mediaItem.description = txtDescription.getText().toString();
-                if (txtURL.getText().toString() != "")
-                    mediaItem.url = txtURL.getText().toString();
-
-                Log.d(MEDIAITEMDETAILACTIVITY, mediaItem.toJson().toString());
-
-                Intent listIntent = new Intent(getApplicationContext(), MyListActivity.class);
-                listIntent.putExtra(MyListActivity.mediaExtra, mediaItem.toJson().toString());
-
-                startActivity(listIntent);
-            }
-        });
-    }
 }
